@@ -1,0 +1,6 @@
+{
+  "itemDisplayName": "N|Solid Quick Start in Azure",
+  "description": "This template allows you to quickly create both an N|Solid Console server and a N|Solid Runtime server.",
+  "summary": "Once your servers are created, open up the IP Address of your N|Solid Console instance to start using the console.",
+  "githubUsername": "nodesource"
+}

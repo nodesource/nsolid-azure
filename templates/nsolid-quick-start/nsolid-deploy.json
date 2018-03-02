@@ -1,0 +1,291 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0",
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin username for VM"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Admin password for VM"
+      }
+    }
+  },
+  "variables": {
+    "location": "[variables('location')]",
+    "consoleVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/carbon/3.0.5-console-osDisk.5bd9f9b5-cc57-4b80-be67-30a08a15d13d.vhd",
+    "runtimeVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/carbon/3.0.5-runtime-osDisk.6e20b1a1-7265-4a94-8d40-c1ec76d0e9d3.vhd"
+  },
+  "resources": [
+    {
+      "name": "NSolid_Console_publicIP",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "name": "NSolid_Runtime_publicIP",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "properties": {},
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[variables('location')]",
+      "apiVersion": "2015-06-15",
+      "name": "NSolid_AS"
+    },
+    {
+      "properties": {
+        "securityRules": [
+          {
+            "name": "ssh_rule",
+            "properties": {
+              "priority": 100,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external SSH",
+              "access": "Allow",
+              "destinationPortRange": "22",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "location": "[variables('location')]",
+      "apiVersion": "2015-06-15",
+      "name": "NSolid_Runtime_SG"
+    },
+    {
+      "properties": {
+        "securityRules": [
+          {
+            "name": "ssh_rule",
+            "properties": {
+              "priority": 100,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external SSH",
+              "access": "Allow",
+              "destinationPortRange": "22",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "http_rule",
+            "properties": {
+              "priority": 100,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external HTTP",
+              "access": "Allow",
+              "destinationPortRange": "80",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "data_rule",
+            "properties": {
+              "priority": 100,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external Data",
+              "access": "Allow",
+              "destinationPortRange": "9001-9003",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "location": "[variables('location')]",
+      "apiVersion": "2015-06-15",
+      "name": "NSolid_Console_SG"
+    },
+    {
+      "name": "NSolid_VNET",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "NSolid_Console_SG",
+        "NSolid_Runtime_SG"
+      ],
+      "type": "Microsoft.Network/virtualNetworks",
+      "properties": {
+        "subnets": [
+          {
+            "name": "NSolid-Subnet-1",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ],
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+      }
+    },
+    {
+      "name": "NSolid_Console_NIC",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/publicIPAddresses/NSolid_Console_publicIP"
+      ],
+      "type": "Microsoft.Network/networkInterfaces",
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "NSolid_Console_SG"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[concat(variables('vnetID'),'/subnets/NSolid-Subnet-1']"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "NSolid_Console_publicIP"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NSolid_Runtime_NIC",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/publicIPAddresses/NSolid_Runtime_publicIP"
+      ],
+      "type": "Microsoft.Network/networkInterfaces",
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "NSolid_Runtime_SG"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[concat(variables('vnetID'),'/subnets/NSolid-Subnet-1']"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "NSolid_Runtime_publicIP"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NSolid-Console",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/NSolid_Console_NIC"
+      ],
+      "type": "Microsoft.Compute/virtualMachines",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A1"
+        },
+        "osProfile": {
+          "adminUsername": "[parameters('adminUsername')]",
+          "computerName": "NSolid-Console",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "availabilitySet": {
+          "id": "NSolid_AS"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "caching": "ReadWrite",
+            "vhd": {
+              "uri": "[variables(consoleVhd)]"
+            },
+            "createOption": "FromImage",
+            "name": "osdisk"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "Microsoft.Network/networkInterfaces/NSolid_Console_NIC]",
+              "properties": {
+                "primary": true
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "NSolid-Runtime",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/NSolid_Runtime_NIC"
+      ],
+      "type": "Microsoft.Compute/virtualMachines",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A1"
+        },
+        "osProfile": {
+          "adminUsername": "[parameters('adminUsername')]",
+          "computerName": "NSolid-Runtime",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "availabilitySet": {
+          "id": "NSolid_AS"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "caching": "ReadWrite",
+            "vhd": {
+              "uri": "[variables(runtimeVhd)]"
+            },
+            "createOption": "FromImage",
+            "name": "osdisk"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "Microsoft.Network/networkInterfaces/NSolid_Runtime_NIC]",
+              "properties": {
+                "primary": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
