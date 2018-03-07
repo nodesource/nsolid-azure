@@ -1,5 +1,7 @@
 # N|Solid Resource Manager Templates
 
+_These templates are provided as a way of getting started. Before using them in production please make the necessary security updates._
+
 ## `nsolid-quick-start`
 
 **Description**
