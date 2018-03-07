@@ -9,6 +9,38 @@
   },
   "resources": [
     {
+      "name": "NSolid-Runtime-Disk",
+      "type": "Microsoft.Compute/disks",
+      "apiVersion": "2017-03-30",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {
+        "osType": "Linux",
+        "creationData": {
+          "createOption": "Import",
+          "sourceUri": "[variables('runtimeVhd')]"
+        }
+      }
+    },
+    {
+      "name": "NSolid-Console-Disk",
+      "type": "Microsoft.Compute/disks",
+      "apiVersion": "2017-03-30",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {
+        "osType": "Linux",
+        "creationData": {
+          "createOption": "Import",
+          "sourceUri": "[variables('consoleVhd')]"
+        }
+      }
+    },
+    {
       "name": "NSolid_Console_publicIP",
       "apiVersion": "2015-06-15",
       "location": "[variables('location')]",
@@ -25,13 +57,6 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
       }
-    },
-    {
-      "properties": {},
-      "type": "Microsoft.Compute/availabilitySets",
-      "location": "[variables('location')]",
-      "apiVersion": "2015-06-15",
-      "name": "NSolid_AS"
     },
     {
       "properties": {
@@ -194,28 +219,26 @@
     },
     {
       "name": "NSolid-Console",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2017-12-01",
       "location": "[variables('location')]",
       "dependsOn": [
-        "Microsoft.Network/networkInterfaces/NSolid_Console_NIC"
+        "Microsoft.Network/networkInterfaces/NSolid_Console_NIC",
+        "Microsoft.Compute/disks/NSolid-Console-Disk"
       ],
       "type": "Microsoft.Compute/virtualMachines",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_A1"
         },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', 'NSolid_AS')]"
-        },
         "storageProfile": {
           "osDisk": {
             "osType": "Linux",
             "caching": "ReadWrite",
-            "vhd": {
-              "uri": "[variables('consoleVhd')]"
+            "managedDisk": {
+              "id": "[resourceId('Microsoft.Compute/disks', 'NSolid-Console-Disk')]",
+              "storageAccountType": "Standard_LRS"
             },
-            "createOption": "Attach",
-            "name": "nsolid-console-osdisk"
+            "createOption": "Attach"
           }
         },
         "networkProfile": {
@@ -232,28 +255,26 @@
     },
     {
       "name": "NSolid-Runtime",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2017-12-01",
       "location": "[variables('location')]",
       "dependsOn": [
-        "Microsoft.Network/networkInterfaces/NSolid_Runtime_NIC"
+        "Microsoft.Network/networkInterfaces/NSolid_Runtime_NIC",
+        "Microsoft.Compute/disks/NSolid-Runtime-Disk"
       ],
       "type": "Microsoft.Compute/virtualMachines",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_A1"
         },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', 'NSolid_AS')]"
-        },
         "storageProfile": {
           "osDisk": {
             "osType": "Linux",
             "caching": "ReadWrite",
-            "vhd": {
-              "uri": "[variables('runtimeVhd')]"
+            "managedDisk": {
+              "id": "[resourceId('Microsoft.Compute/disks', 'NSolid-Runtime-Disk')]",
+              "storageAccountType": "Standard_LRS"
             },
-            "createOption": "Attach",
-            "name": "nsolid-runtime-osdisk"
+            "createOption": "Attach"
           }
         },
         "networkProfile": {
