@@ -4,8 +4,8 @@
   "parameters": {},
   "variables": {
     "location": "[resourceGroup().location]",
-    "consoleVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.1-console-osDisk.21e00bd2-9c93-4f52-9f78-3ba5a642107e.vhd",
-    "runtimeVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.1-runtime-osDisk.947533f9-a58e-46fd-a1ad-c4308514bb25.vhd"
+    "consoleVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.2-console-osDisk.57ca412e-cbd8-4259-a7c6-9ecf19e3cc1f.vhd",
+    "runtimeVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.2-runtime-osDisk.18ce19cf-6b03-417b-8fb1-abefb77b6694.vhd"
   },
   "resources": [
     {
