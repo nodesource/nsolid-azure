@@ -2,6 +2,10 @@
 
 _These templates are provided as a way of getting started. Before using them in production please make the necessary security updates._
 
+#### Logging In
+
+To access any virtual machine created by these templates, you can SSH to them with the username `ns` and the password of `nodesource`
+
 ## `nsolid-quick-start`
 
 **Description**
@@ -17,6 +21,8 @@ _Resources Created_
 |      2 Network Interfaces     |
 |       2 Security Groups       |
 |         2 Public IPs          |
+
+_Currently only the West US region is supported for this template._
 
 **Deploy**
 

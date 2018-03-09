@@ -6,7 +6,7 @@
 
 ## Getting Started
 
-Easily run N|Solid in Azure using our [Resource Manager Templates](templates/). You can find a list of templates and their descriptions in the templates [README](/templates/README.md). Once you find a template you want to use, simply click the deploy button.
+Easily run N|Solid in Azure using our [Resource Manager Templates](templates/). You can find a list of templates and their descriptions in the template's [README](/templates/README.md). Once you find a template you want to use, simply click the deploy button.
 
 Follow these steps to use the [Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal) templates in `azure-nsolid`:
 
