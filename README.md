@@ -22,7 +22,6 @@ Follow these steps to use the [Resource Manager](https://docs.microsoft.com/en-u
 
 5. Click the **Purchase** button.
 
-
 [![Launch ARM Template](/images/deploy-to-azure.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fnodesourcearmtemplates.blob.core.windows.net%2Fpublic%2Fnsolid-quick-start.json)
 
 ## Image List
