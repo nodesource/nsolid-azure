@@ -289,5 +289,15 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "SSH Username": {
+      "type": "string",
+      "value": "ns"
+    },
+    "SSH Password": {
+      "type": "string",
+      "value": "nodesource"
+    }
+  }
 }
