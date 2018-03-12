@@ -2,11 +2,11 @@
 
 # N|Solid on Azure
 
-[Azure](https://azure.microsoft.com/en-us/?v=18.07a) is a comprehensive set of cloud services that developers and IT professionals use to build, deploy, and manage applications through a global network of datacenters. Deploy your [N|Solid](https://nodesource.com/products/nsolid) instances to the Azure cloud for cloud access to the only Node.js platform built for mission-critical applications.
+[Azure](https://azure.microsoft.com/en-us/?v=18.07a) is a comprehensive set of cloud services that developers and IT professionals use to build, deploy, and manage applications through a global network of datacenters. Deploy your [N|Solid](https://nodesource.com/products/nsolid) instances to Azure for cloud access to the only Node.js platform built for mission-critical applications.
 
 ## Getting Started
 
-Easily run N|Solid on Azure using our [Resource Manager Templates](templates/). You can find a list of templates and their descriptions in the templates [README](/templates/README.md). Once you find a template you want to use, simply click the deploy button.
+Easily run N|Solid on Azure using our [Resource Manager Templates](templates/). You can find a list of templates and their descriptions in the template's [README](/templates/README.md). Once you find a template you want to use, simply click the deploy button.
 
 Follow these steps to use the [Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal) templates in `azure-nsolid`:
 
