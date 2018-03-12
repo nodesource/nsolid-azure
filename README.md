@@ -8,8 +8,6 @@
 
 Easily run N|Solid on Azure using our [Resource Manager Templates](templates/). You can find a list of templates and their descriptions in the templates [README](/templates/README.md). Once you find a template you want to use, simply click the deploy button.
 
-If you don't already have an N|Solid license key, start a [free trial](https://pages.nodesource.com/nsolid-free-trial.html). To retrieve an existing license key, follow [the docs](https://docs.nodesource.com/nsolid/3.0/docs#setting-up-the-nsolid-console) for step-by-step instructions. 
-
 Follow these steps to use the [Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal) templates in `azure-nsolid`:
 
 1. Find the template you want to run in the `/templates` folder, then click the **Deploy to Azure** button. This will open up a Custom Deployment in Azure Resource Manager in your own account.
