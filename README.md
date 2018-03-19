@@ -1,10 +1,10 @@
 ![N|Solid](/images/nsolid-azure.png)
 
-# N|Solid on Azure
+# NodeSource N|Solid on Azure
 
 [Azure](https://azure.microsoft.com/en-us/?v=18.07a) is a comprehensive set of cloud services that developers and IT professionals use to build, deploy, and manage applications through a global network of datacenters. Deploy your [N|Solid](https://nodesource.com/products/nsolid) instances to Azure for cloud access to the only Node.js platform built for mission-critical applications.
 
-## Getting Started
+## Getting Started with N|Solid on Azure
 
 Easily run N|Solid on Azure using our [Resource Manager Templates](templates/). You can find a list of templates and their descriptions in the template's [README](/templates/README.md). Once you find a template you want to use, simply click the deploy button.
 
@@ -34,6 +34,16 @@ $ az storage blob copy start --destination-blob nsolid-console-disk --destinatio
 
 [![Launch ARM Template](/images/deploy-to-azure.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fnodesourcearmtemplates.blob.core.windows.net%2Fpublic%2Fnsolid-quick-start.json)
 
-## Image List
+## N|Solid Image List for Azure
 
 You can also use our N|Solid Images for your own projects. See [IMAGE-LIST.md](IMAGE-LIST.md) for a full list of Image IDs.
+
+**Latest:**
+
+Console:
+
+`https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.5-console-osDisk.b5e38e89-8460-4650-a6e0-db842fea8642.vhd`
+
+Runtime:
+
+`https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.5-runtime-osDisk.05cc044e-7aeb-4e47-951c-056d58f81ca0.vhd`
