@@ -37,6 +37,7 @@ os.remove("./.IMAGE-LIST.updated.md")
 
 # Templates update
 templates = [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser("./templates")) for f in fn]
+templates.append('./README.md')
 for template in templates:
     if ".md" not in template:
         with open(template, "r") as inFile:
