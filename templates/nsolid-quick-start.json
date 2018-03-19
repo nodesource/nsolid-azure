@@ -1,11 +1,22 @@
 {
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0",
-  "parameters": {},
+  "parameters": {
+    "consoleVhd": {
+      "type": "string",
+      "metadata": {
+        "description": "URI for your copied N|Solid Console VHD"
+      }
+    },
+    "runtimeVhd": {
+      "type": "string",
+      "metadata": {
+        "description": "URI for your copied N|Solid Runtime VHD"
+      }
+    }
+  },
   "variables": {
-    "location": "[resourceGroup().location]",
-    "consoleVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.5-console-osDisk.b5e38e89-8460-4650-a6e0-db842fea8642.vhd",
-    "runtimeVhd": "https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.5-runtime-osDisk.05cc044e-7aeb-4e47-951c-056d58f81ca0.vhd"
+    "location": "[resourceGroup().location]"
   },
   "resources": [
     {
@@ -20,7 +31,7 @@
         "osType": "Linux",
         "creationData": {
           "createOption": "Import",
-          "sourceUri": "[variables('runtimeVhd')]"
+          "sourceUri": "[parameters('runtimeVhd')]"
         }
       }
     },
@@ -36,7 +47,7 @@
         "osType": "Linux",
         "creationData": {
           "createOption": "Import",
-          "sourceUri": "[variables('consoleVhd')]"
+          "sourceUri": "[parameters('consoleVhd')]"
         }
       }
     },
