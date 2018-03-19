@@ -7,4 +7,6 @@ fi
 
 az login --service-principal -u 5ec337b0-2f46-4ef1-a336-41782a78dacf -p $(cat ~/.azure/azure-build-key.txt) --tenant 303c34b0-e6cc-4ed4-bc66-99f6ae15f78d
 az storage blob upload --container-name public --name nsolid-quick-start.json --file templates/nsolid-quick-start.json --account-name nodesourcearmtemplates
+az storage blob upload --container-name public --name nsolid-console-only.json --file templates/nsolid-console-only.json --account-name nodesourcearmtemplates
+az storage blob upload --container-name public --name nsolid-runtime-only.json --file templates/nsolid-runtime-only.json --account-name nodesourcearmtemplates
 echo "Templates Updated"

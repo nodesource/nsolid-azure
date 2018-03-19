@@ -1,0 +1,166 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0",
+  "parameters": {
+    "runtimeVhd": {
+      "type": "string",
+      "metadata": {
+        "description": "URI for your copied N|Solid Runtime VHD"
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+      "name": "NSolid-Runtime-Disk",
+      "type": "Microsoft.Compute/disks",
+      "apiVersion": "2017-03-30",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {
+        "osType": "Linux",
+        "creationData": {
+          "createOption": "Import",
+          "sourceUri": "[parameters('runtimeVhd')]"
+        }
+      }
+    },
+    {
+      "name": "NSolid_Runtime_publicIP",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "properties": {
+        "securityRules": [
+          {
+            "name": "ssh_rule",
+            "properties": {
+              "priority": 100,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external SSH",
+              "access": "Allow",
+              "destinationPortRange": "22",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "location": "[variables('location')]",
+      "apiVersion": "2015-06-15",
+      "name": "NSolidRuntimeSG"
+    },
+    {
+      "name": "NSolid_VNET",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/networkSecurityGroups/NSolidConsoleSG",
+        "Microsoft.Network/networkSecurityGroups/NSolidRuntimeSG"
+      ],
+      "type": "Microsoft.Network/virtualNetworks",
+      "properties": {
+        "subnets": [
+          {
+            "name": "NSolid-Subnet",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ],
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+      }
+    },
+    {
+      "name": "NSolid_Runtime_NIC",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/publicIPAddresses/NSolid_Runtime_publicIP",
+        "Microsoft.Network/virtualNetworks/NSolid_VNET"
+      ],
+      "type": "Microsoft.Network/networkInterfaces",
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'NSolidRuntimeSG')]"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks','NSolid_VNET'),'/subnets/NSolid-Subnet')]"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIpAddresses', 'NSolid_Runtime_publicIP')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NSolid-Runtime",
+      "apiVersion": "2017-12-01",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/networkInterfaces/NSolid_Runtime_NIC",
+        "Microsoft.Compute/disks/NSolid-Runtime-Disk"
+      ],
+      "type": "Microsoft.Compute/virtualMachines",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A1"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "osType": "Linux",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "id": "[resourceId('Microsoft.Compute/disks', 'NSolid-Runtime-Disk')]",
+              "storageAccountType": "Standard_LRS"
+            },
+            "createOption": "Attach"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'NSolid_Runtime_NIC')]",
+              "properties": {
+                "primary": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "SSH Username": {
+      "type": "string",
+      "value": "ns"
+    },
+    "SSH Password": {
+      "type": "string",
+      "value": "nodesource"
+    }
+  }
+}

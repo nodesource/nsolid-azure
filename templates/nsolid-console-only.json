@@ -1,0 +1,193 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0",
+  "parameters": {
+    "consoleVhd": {
+      "type": "string",
+      "metadata": {
+        "description": "URI for your copied N|Solid Console VHD"
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+      "name": "NSolid-Console-Disk",
+      "type": "Microsoft.Compute/disks",
+      "apiVersion": "2017-03-30",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {
+        "osType": "Linux",
+        "creationData": {
+          "createOption": "Import",
+          "sourceUri": "[parameters('consoleVhd')]"
+        }
+      }
+    },
+    {
+      "name": "NSolid_Console_publicIP",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "properties": {
+        "securityRules": [
+          {
+            "name": "ssh_rule",
+            "properties": {
+              "priority": 102,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external SSH",
+              "access": "Allow",
+              "destinationPortRange": "22",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "http_rule",
+            "properties": {
+              "priority": 101,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external HTTP",
+              "access": "Allow",
+              "destinationPortRange": "80",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "data_rule",
+            "properties": {
+              "priority": 100,
+              "direction": "Inbound",
+              "protocol": "Tcp",
+              "description": "Allow external Data",
+              "access": "Allow",
+              "destinationPortRange": "9001-9003",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "Internet"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "location": "[variables('location')]",
+      "apiVersion": "2015-06-15",
+      "name": "NSolidConsoleSG"
+    },
+    {
+      "name": "NSolid_VNET",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/networkSecurityGroups/NSolidConsoleSG"
+      ],
+      "type": "Microsoft.Network/virtualNetworks",
+      "properties": {
+        "subnets": [
+          {
+            "name": "NSolid-Subnet",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ],
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+      }
+    },
+    {
+      "name": "NSolid_Console_NIC",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/publicIPAddresses/NSolid_Console_publicIP",
+        "Microsoft.Network/virtualNetworks/NSolid_VNET"
+      ],
+      "type": "Microsoft.Network/networkInterfaces",
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'NSolidConsoleSG')]"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks','NSolid_VNET'),'/subnets/NSolid-Subnet')]"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIpAddresses', 'NSolid_Console_publicIP')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NSolid-Console",
+      "apiVersion": "2017-12-01",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "Microsoft.Network/networkInterfaces/NSolid_Console_NIC",
+        "Microsoft.Compute/disks/NSolid-Console-Disk"
+      ],
+      "type": "Microsoft.Compute/virtualMachines",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A1"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "osType": "Linux",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "id": "[resourceId('Microsoft.Compute/disks', 'NSolid-Console-Disk')]",
+              "storageAccountType": "Standard_LRS"
+            },
+            "createOption": "Attach"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'NSolid_Console_NIC')]",
+              "properties": {
+                "primary": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "SSH Username": {
+      "type": "string",
+      "value": "ns"
+    },
+    "SSH Password": {
+      "type": "string",
+      "value": "nodesource"
+    }
+  }
+}
