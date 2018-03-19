@@ -37,13 +37,3 @@ $ az storage blob copy start --destination-blob nsolid-console-disk --destinatio
 ## N|Solid Image List for Azure
 
 You can also use our N|Solid Images for your own projects. See [IMAGE-LIST.md](IMAGE-LIST.md) for a full list of Image IDs.
-
-**Latest:**
-
-Console:
-
-`https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.5-console-osDisk.b5e38e89-8460-4650-a6e0-db842fea8642.vhd`
-
-Runtime:
-
-`https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/3.0.5-runtime-osDisk.05cc044e-7aeb-4e47-951c-056d58f81ca0.vhd`
