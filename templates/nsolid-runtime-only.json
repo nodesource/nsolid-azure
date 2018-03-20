@@ -67,7 +67,6 @@
       "apiVersion": "2015-06-15",
       "location": "[variables('location')]",
       "dependsOn": [
-        "Microsoft.Network/networkSecurityGroups/NSolidConsoleSG",
         "Microsoft.Network/networkSecurityGroups/NSolidRuntimeSG"
       ],
       "type": "Microsoft.Network/virtualNetworks",
