@@ -11,7 +11,7 @@ If you don't already have a license key, please visit the NodeSource website to 
 
 Easily run N|Solid on Azure using our [Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal) templates. You can find a list of templates and their descriptions in the [README](/templates/README.md).
 
-Follow these steps to use the Resource Manager templates in `azure-nsolid`:
+Follow these steps to use the Resource Manager templates in `nsolid-azure`:
 
 1. Make a copy of our N|Solid VHDs into your own account for use in the templates.
 
