@@ -8,6 +8,7 @@ All Image Names are preceded by: https://nsoliddisks.blob.core.windows.net/syste
 
 | NSolid Version |                          Console Image                          |                            Runtime Image                        |
 |----------------|-----------------------------------------------------------------|-----------------------------------------------------------------|
+|   **3.8.1**    | `3.8.1-console-osDisk.ede911f0-7aff-408b-894e-694d755c279d.vhd` | `3.8.1-runtime-osDisk.68d46d67-2041-46f2-a34d-2d847d4d7345.vhd` |
 |   **3.8.0**    | `3.8.0-console-osDisk.898d98b0-1c68-43c2-bde9-11360abb1d6e.vhd` | `3.8.0-runtime-osDisk.c77587d0-e2d7-470c-8138-7f6a3b6020b8.vhd` |
 |   **3.7.1**    | `3.7.1-console-osDisk.d306db60-85ba-46f6-aeb8-994a09f4d124.vhd` | `3.7.1-runtime-osDisk.3d62bd02-211a-41f4-9d01-888243b90c7d.vhd` |
 |   **3.7.0**    | `3.7.0-console-osDisk.1045aa39-a87f-40ab-9064-fa3ab06b8e44.vhd` | `3.7.0-runtime-osDisk.24edf066-28b6-4bdc-ae71-73ba3d549b9d.vhd` |
