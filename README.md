@@ -16,11 +16,11 @@ Follow these steps to use the Resource Manager templates in `nsolid-azure`:
 1. Make a copy of our N|Solid VHDs into your own account for use in the templates.
 
 ```
-$ az storage blob copy start --destination-blob nsolid-runtime-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.0.1-runtime-osDisk.efee3e5e-4979-4140-bf7c-e0ecea720a6b.vhd --account-name <your-storage-account-name>
+$ az storage blob copy start --destination-blob nsolid-runtime-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.1.0-runtime-osDisk.71b635fe-a9c8-4727-a8c5-5cac5620851d.vhd --account-name <your-storage-account-name>
 ```
 
 ```
-$ az storage blob copy start --destination-blob nsolid-console-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.0.1-console-osDisk.3a11d1c9-9a01-47b9-bb24-ef831668b510.vhd --account-name <your-storage-account-name>
+$ az storage blob copy start --destination-blob nsolid-console-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.1.0-console-osDisk.84577ae6-2658-435e-9cc3-ce6d151b2f08.vhd --account-name <your-storage-account-name>
 ```
 
 2. Find the template you want to run in the `/templates` folder, then click the **Deploy to Azure** button. This will open up a Custom Deployment in Azure Resource Manager in your own account.
