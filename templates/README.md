@@ -13,11 +13,11 @@ Access any virtual machine created by these templates with the following SSH cre
 Make a copy of our N|Solid VHDs into your own account for use in the templates.
 
 ```
-$ az storage blob copy start --destination-blob nsolid-runtime-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.6.2-runtime-osDisk.e2843d74-547b-44f0-baf8-884d458f3c15.vhd --account-name <your-storage-account-name>
+$ az storage blob copy start --destination-blob nsolid-runtime-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.6.3-runtime-osDisk.c3a4e967-4d00-47f1-856b-18710fb7cb7e.vhd --account-name <your-storage-account-name>
 ```
 
 ```
-$ az storage blob copy start --destination-blob nsolid-console-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.6.2-console-osDisk.08e46335-e4d7-48cf-9b69-a0025695aa29.vhd --account-name <your-storage-account-name>
+$ az storage blob copy start --destination-blob nsolid-console-disk --destination-container <your-storage-container> --source-uri https://nsoliddisks.blob.core.windows.net/system/Microsoft.Compute/Images/nsolid/4.6.3-console-osDisk.75e93861-debb-4db3-b487-36b0c7865763.vhd --account-name <your-storage-account-name>
 ```
 
 ## `nsolid-quick-start`
