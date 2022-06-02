@@ -24,7 +24,7 @@ if [[ $tl -gt 0   ]]; then
 else 
    echo "Processing blobs"   
 fi   
-az storage blob upload --container-name public --name nsolid-quick-start.json --file templates/nsolid-quick-start.json --account-name nodesourcearmtemplates
-az storage blob upload --container-name public --name nsolid-console-only.json --file templates/nsolid-console-only.json --account-name nodesourcearmtemplates
-az storage blob upload --container-name public --name nsolid-runtime-only.json --file templates/nsolid-runtime-only.json --account-name nodesourcearmtemplates
+az storage blob upload --container-name public --name nsolid-quick-start.json --file templates/nsolid-quick-start.json --account-name nodesourcearmtemplates --overwrite
+az storage blob upload --container-name public --name nsolid-console-only.json --file templates/nsolid-console-only.json --account-name nodesourcearmtemplates --overwrite
+az storage blob upload --container-name public --name nsolid-runtime-only.json --file templates/nsolid-runtime-only.json --account-name nodesourcearmtemplates --overwrite
 echo "Templates Updated"
